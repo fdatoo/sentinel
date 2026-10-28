@@ -1,0 +1,87 @@
+name: Sentinel
+options:
+  bundleIdPrefix: com.example
+  createIntermediateGroups: true
+  deploymentTarget:
+    macOS: "15.0"
+    iOS: "18.0"
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    SWIFT_STRICT_CONCURRENCY: complete
+    CODE_SIGN_STYLE: Automatic
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "3"
+configFiles:
+  Debug: Config/Signing.xcconfig
+  Release: Config/Signing.xcconfig
+packages:
+  SentinelKit:
+    path: SentinelKit
+targets:
+  SentinelMac:
+    type: application
+    platform: macOS
+    sources:
+      - SentinelMac
+    dependencies:
+      - package: SentinelKit
+    info:
+      path: SentinelMac/Info.plist
+      properties:
+        CFBundleDisplayName: Sentinel
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSUIElement: true
+        LSApplicationCategoryType: public.app-category.productivity
+        ITSAppUsesNonExemptEncryption: false
+    entitlements:
+      path: SentinelMac/SentinelMac.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+        com.apple.security.network.client: true
+        com.apple.developer.usernotifications.time-sensitive: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(SENTINEL_BUNDLE_ID)
+        PRODUCT_NAME: Sentinel
+        ENABLE_HARDENED_RUNTIME: YES
+        ENABLE_APP_SANDBOX: YES
+        GENERATE_INFOPLIST_FILE: NO
+  SentinelPhone:
+    type: application
+    platform: iOS
+    sources:
+      - SentinelPhone
+    dependencies:
+      - package: SentinelKit
+    info:
+      path: SentinelPhone/Info.plist
+      properties:
+        CFBundleDisplayName: Sentinel
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        UILaunchScreen: {}
+        UIBackgroundModes:
+          - remote-notification
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        ITSAppUsesNonExemptEncryption: false
+        NSFaceIDUsageDescription: Sentinel asks for Face ID before approving a request on your behalf.
+        # Local dev only: lets the app reach the hub's plain-HTTP dev mode.
+        # Production uses HTTPS on the tailnet and doesn't need this.
+        NSAppTransportSecurity:
+          NSAllowsArbitraryLoads: true
+    entitlements:
+      path: SentinelPhone/SentinelPhone.entitlements
+      properties:
+        aps-environment: development
+        com.apple.developer.usernotifications.time-sensitive: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(SENTINEL_BUNDLE_ID)
+        PRODUCT_NAME: Sentinel
+        TARGETED_DEVICE_FAMILY: "1"
+        GENERATE_INFOPLIST_FILE: NO

@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  hub:
+    name: Hub (Go)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: hub/go.mod
+          cache-dependency-path: hub/go.sum
+      - name: Vet
+        working-directory: hub
+        run: go vet ./...
+      - name: Test
+        working-directory: hub
+        run: go test -race ./...
+
+  apple:
+    name: Apple (SentinelKit and app builds)
+    # macOS minutes are billed at 10x on private repositories and free on public
+    # ones, so skip this job unless the repository is public.
+    if: github.event.repository.private == false
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test SentinelKit
+        working-directory: apple/SentinelKit
+        run: swift test
+      - name: Build the Mac app
+        working-directory: apple
+        run: >
+          xcodebuild -project Sentinel.xcodeproj -scheme SentinelMac
+          -configuration Debug CODE_SIGNING_ALLOWED=NO build
+      - name: Build the iPhone app
+        working-directory: apple
+        run: >
+          xcodebuild -project Sentinel.xcodeproj -scheme SentinelPhone
+          -configuration Debug -destination 'generic/platform=iOS Simulator'
+          CODE_SIGNING_ALLOWED=NO build

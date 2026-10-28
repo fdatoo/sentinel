@@ -1,0 +1,29 @@
+# Go
+/hub/bin/
+*.test
+*.out
+
+# Xcode
+/apple/build/
+/apple/**/*.xcodeproj/xcuserdata/
+/apple/**/*.xcworkspace/xcuserdata/
+DerivedData/
+.build/
+.swiftpm/
+
+# Local state
+*.db
+*.db-*
+.DS_Store
+.env
+*.p8
+.claude/
+
+# Editor
+.idea/
+.vscode/
+*.swp
+*.xcuserstate
+
+# Local signing values (team ID, bundle ID)
+/apple/Config/Local.xcconfig

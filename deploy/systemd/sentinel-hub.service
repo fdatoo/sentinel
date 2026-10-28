@@ -1,0 +1,23 @@
+# Install to /etc/systemd/system, put the APNs key at /etc/sentinel/apns.p8 and
+# flags in /etc/sentinel/hub.env, then:
+#   systemctl enable --now sentinel-hub
+[Unit]
+Description=Sentinel hub
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+EnvironmentFile=/etc/sentinel/hub.env
+ExecStart=/usr/local/bin/sentinel-hub --state-dir /var/lib/sentinel-hub --apns-key %d/apns.p8 $SENTINEL_HUB_FLAGS
+DynamicUser=yes
+StateDirectory=sentinel-hub
+LoadCredential=apns.p8:/etc/sentinel/apns.p8
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+
+[Install]
+WantedBy=multi-user.target

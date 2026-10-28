@@ -1,0 +1,8 @@
+// Copy to Local.xcconfig (ignored by git) and edit.
+
+// Your Apple developer team ID, from developer.apple.com under Membership details.
+DEVELOPMENT_TEAM = ABCDE12345
+
+// Bundle ID shared by the Mac and iPhone apps. Use one you own. Pass the same value
+// to the hub as --apns-topic, or APNs rejects every push.
+SENTINEL_BUNDLE_ID = com.yourname.sentinel

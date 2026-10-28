@@ -1,0 +1,11 @@
+// Signing and bundle settings shared by both apps.
+//
+// Copy Local.xcconfig.example to Local.xcconfig and fill in your own values.
+// Local.xcconfig is ignored by git, so your team ID and bundle ID stay on your
+// machine. Without it the apps build with the placeholder bundle ID below and no
+// signing team, which is enough for the simulator but not for a device.
+
+DEVELOPMENT_TEAM =
+SENTINEL_BUNDLE_ID = com.example.sentinel
+
+#include? "Local.xcconfig"

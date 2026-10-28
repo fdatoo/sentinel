@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Install to ~/Library/LaunchAgents, edit the paths and flags, then:
+     launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/io.fdatoo.sentinel-hub.plist -->
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>io.fdatoo.sentinel-hub</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/usr/local/bin/sentinel-hub</string>
+		<string>--owner</string>
+		<string>you@example.com</string>
+		<string>--apns-key</string>
+		<string>/usr/local/etc/sentinel/AuthKey_XXXXXXXXXX.p8</string>
+		<string>--apns-key-id</string>
+		<string>XXXXXXXXXX</string>
+		<string>--apns-team-id</string>
+		<string>YYYYYYYYYY</string>
+	</array>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>KeepAlive</key>
+	<true/>
+	<key>StandardErrorPath</key>
+	<string>/tmp/sentinel-hub.log</string>
+</dict>
+</plist>
